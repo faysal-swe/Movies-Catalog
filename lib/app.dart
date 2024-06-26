@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_catalog/ui/screens/home.dart';
-
 import 'ui/state_management/movies_controller.dart';
+import 'ui/state_management/tv_series_controller.dart';
 
 class MovieCatalogApp extends StatelessWidget {
   const MovieCatalogApp({Key? key}) : super(key: key);
@@ -24,6 +24,7 @@ class ControllerBinding extends Bindings{
  @override
   void dependencies() {
     // TODO: implement dependencies
-   Get.put(MoviesController());
+   Get.put<MoviesController>(MoviesController());
+   Get.put<TvSeriesController>(TvSeriesController());
   }
 }

@@ -7,7 +7,7 @@ import 'package:movie_catalog/data/utils/urls.dart';
 class MoviesController extends GetxController{
   MoviesModel _moviesList = MoviesModel();
   bool _isInProgress = false;
-  bool get movieInProgress=> _isInProgress;
+  bool get showInProgress=> _isInProgress;
   MoviesModel get showMovieList=> _moviesList;
 
   Future<void> moviesList() async {

@@ -1,11 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movie_catalog/data/models/movies_model.dart';
-import 'package:movie_catalog/data/services/network_calling.dart';
-import 'package:movie_catalog/data/utils/urls.dart';
 import 'package:movie_catalog/ui/screens/movie/movies_catalog_view.dart';
-import '../../../data/models/network_response.dart';
+import '../../state_management/movies_controller.dart';
 
 class MoviesScreen extends StatefulWidget {
   const MoviesScreen({Key? key}) : super(key: key);
@@ -15,30 +12,12 @@ class MoviesScreen extends StatefulWidget {
 }
 
 class _MoviesScreenState extends State<MoviesScreen> {
-  MoviesModel _moviesList = MoviesModel();
-  bool _isInProgress = false;
+  final MoviesController _moviesController = Get.find<MoviesController>();
 
-  Future<void> moviesList() async {
-    _isInProgress = true;
-    if(mounted){
-      setState(() {});
-    }
-    NetworkResponse response =
-    await NetworkCalling().getRequest(Urls.movies);
-    if (response.isSuccess) {
-      _moviesList = MoviesModel.fromJson(response.body!);
-    } else {
-      Get.snackbar('Movies Catalog', "Failed To Load");
-    }
-    _isInProgress = false;
-    if(mounted){
-      setState(() {});
-    }
-  }
   @override
   void initState() {
     // TODO: implement initState
-    moviesList();
+    _moviesController.moviesList();
     super.initState();
   }
 
@@ -47,12 +26,16 @@ class _MoviesScreenState extends State<MoviesScreen> {
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(24.0),
-      child: Visibility(
-              visible:!_isInProgress,
-              replacement: const Center(
-                  child:
-                      CircularProgressIndicator(color: Colors.deepOrangeAccent)),
-              child: MoviesCatalogView(data: _moviesList.results))
+      child: GetBuilder<MoviesController>(
+        builder: (_) {
+          return Visibility(
+                  visible:!_moviesController.showInProgress,
+                  replacement: const Center(
+                      child:
+                          CircularProgressIndicator(color: Colors.deepOrangeAccent)),
+                  child: MoviesCatalogView(data: _moviesController.showMovieList.results));
+        }
+      )
     ));
   }
 }
