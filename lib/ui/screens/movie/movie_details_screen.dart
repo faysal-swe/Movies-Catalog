@@ -59,6 +59,13 @@ class _ShowMovieDetailsScreenState extends State<ShowMovieDetailsScreen> {
               children: [
                 Image.network(
                   Urls.baseImageUrl(_movieDetails.posterPath.toString()),
+                  errorBuilder:(_,__,___){
+                    return const Icon(
+                      Icons.image,
+                      color:Colors.deepOrangeAccent,
+                      size:400.0,
+                    );
+                  },
                   height: 400.0,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -82,7 +89,7 @@ class _ShowMovieDetailsScreenState extends State<ShowMovieDetailsScreen> {
                   Text(_movieDetails.title.toString(),
                       style: Theme.of(context)
                           .textTheme
-                          .headlineLarge!
+                          .headlineMedium!
                           .merge(const TextStyle(fontWeight: FontWeight.w700))),
                   const SizedBox(height: 10.0),
                   Row(
@@ -103,7 +110,7 @@ class _ShowMovieDetailsScreenState extends State<ShowMovieDetailsScreen> {
                       const SizedBox(width: 30.0),
                       Row(
                         children: [
-                          const Icon(Icons.star),
+                          const Icon(Icons.star, color:Colors.amber),
                           const SizedBox(width: 10.0),
                           Text(
                               "${_movieDetails.voteAverage?.toStringAsFixed(1)}",

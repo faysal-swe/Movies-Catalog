@@ -22,6 +22,7 @@ class _TvSeriesDetailsScreenState extends State<TvSeriesDetailsScreen> {
     if (mounted) {
       setState(() {});
     }
+    log("Tv series id : ${widget.id}");
     NetworkResponse response =
     await NetworkCalling().getRequest(Urls.tvSeriesDetails(widget.id));
     if (response.isSuccess) {
@@ -59,6 +60,13 @@ class _TvSeriesDetailsScreenState extends State<TvSeriesDetailsScreen> {
                   children: [
                     Image.network(
                       Urls.baseImageUrl(_tvSeriesDetails.posterPath.toString()),
+                      errorBuilder:(_,__,___){
+                        return const Icon(
+                          Icons.image,
+                          color:Colors.deepOrangeAccent,
+                          size: 400.0,
+                        );
+                      },
                       height: 400.0,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -82,28 +90,36 @@ class _TvSeriesDetailsScreenState extends State<TvSeriesDetailsScreen> {
                       Text(_tvSeriesDetails.name.toString(),
                           style: Theme.of(context)
                               .textTheme
-                              .headlineLarge!
+                              .headlineMedium!
                               .merge(const TextStyle(fontWeight: FontWeight.w700))),
                       const SizedBox(height: 10.0),
                       Row(
+                        crossAxisAlignment:CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.access_time, color: Colors.white60),
-                              const SizedBox(width: 10.0),
-                              Text(_tvSeriesDetails.episodeRunTime.runtimeType.toString(),
+                              Text('Release date',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .merge(const TextStyle(
+                                      fontWeight: FontWeight.w700))),
+                              const SizedBox(height: 10.0),
+                              Text(_tvSeriesDetails.firstAirDate.toString(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall!
                                       .merge(const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white60)))
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white60,
+                                  )))
                             ],
                           ),
                           const SizedBox(width: 30.0),
                           Row(
                             children: [
-                              const Icon(Icons.star),
+                              const Icon(Icons.star, color:Colors.amber),
                               const SizedBox(width: 10.0),
                               Text(
                                   "${_tvSeriesDetails.voteAverage?.toStringAsFixed(1)}",
@@ -120,68 +136,50 @@ class _TvSeriesDetailsScreenState extends State<TvSeriesDetailsScreen> {
                       const SizedBox(height: 10.0),
                       const Divider(color: Colors.white10),
                       const SizedBox(height: 10.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Release date',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .merge(const TextStyle(
-                                  fontWeight: FontWeight.w700))),
-                          const SizedBox(height: 10.0),
-                          Text(_tvSeriesDetails.firstAirDate.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .merge(const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white60,
-                              )))
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Genre',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .merge(const TextStyle(
-                                  fontWeight: FontWeight.w700))),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 40.0,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              primary: false,
-                              shrinkWrap: true,
-                              itemCount: _tvSeriesDetails.genres?.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Chip(
-                                    label: Text(
-                                      "${_tvSeriesDetails.genres?[index].name}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .merge(const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white60,
-                                      )),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                      Visibility(
+                        visible: _tvSeriesDetails.genres?.isNotEmpty ?? false,
+                        child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Genre',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .merge(const TextStyle(
+                                      fontWeight: FontWeight.w700))),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 40.0,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemCount: _tvSeriesDetails.genres?.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Chip(
+                                        label: Text(
+                                          "${_tvSeriesDetails.genres?[index].name}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall!
+                                              .merge(const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white60,
+                                          )),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 10.0),
+                              const Divider(color: Colors.white10),
+                              const SizedBox(height: 10.0),
+                            ],
                           )
-                        ],
                       ),
-                      const SizedBox(height: 10.0),
-                      const Divider(color: Colors.white10),
-                      const SizedBox(height: 10.0),
                       Text(
                         'Overview',
                         style: Theme.of(context)
@@ -190,7 +188,10 @@ class _TvSeriesDetailsScreenState extends State<TvSeriesDetailsScreen> {
                             .merge(const TextStyle(fontWeight: FontWeight.w700)),
                       ),
                       const SizedBox(height: 10.0),
-                      Text(_tvSeriesDetails.overview.toString(),
+                      Text(
+                          _tvSeriesDetails.overview.toString().isNotEmpty ?
+                          _tvSeriesDetails.overview.toString() :
+                          "We don't have an overview translated in English. Help us expand our database by adding one.",
                           textAlign: TextAlign.justify,
                           style: Theme.of(context)
                               .textTheme

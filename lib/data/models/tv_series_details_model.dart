@@ -73,12 +73,6 @@ class TvSeriesDetailsModel {
         createdBy!.add(new CreatedBy.fromJson(v));
       });
     }
-    if (json['episode_run_time'] != null) {
-      episodeRunTime = <EpisodeRunTime>[];
-      json['episode_run_time'].forEach((v) {
-        episodeRunTime!.add(new EpisodeRunTime.fromJson(v));
-      });
-    }
     firstAirDate = json['first_air_date'];
     if (json['genres'] != null) {
       genres = <Genres>[];

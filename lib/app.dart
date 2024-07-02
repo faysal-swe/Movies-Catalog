@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_catalog/ui/screens/home.dart';
 import 'ui/state_management/movies_controller.dart';
+import 'ui/state_management/people_list_controller.dart';
 import 'ui/state_management/tv_series_controller.dart';
 
 class MovieCatalogApp extends StatelessWidget {
@@ -26,5 +27,6 @@ class ControllerBinding extends Bindings{
     // TODO: implement dependencies
    Get.put<MoviesController>(MoviesController());
    Get.put<TvSeriesController>(TvSeriesController());
+   Get.put<PeopleListController>(PeopleListController());
   }
 }
